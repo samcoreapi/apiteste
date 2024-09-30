@@ -1,7 +1,12 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from "express";
+import appointmentsRouter from "./routes/appointments.routes";
 const app = express();
-const PORT = process.env.PORT || 3000;
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World');
+
+const routes = Router();
+routes.use("/api", appointmentsRouter);
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("<center><h1>API de Agendamentos</h1></center>");
 });
+
 export default app;
