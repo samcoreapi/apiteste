@@ -59,16 +59,30 @@ export class AppointmentsService {
     title: string,
     date: string,
     name: string,
-    option1: string,
-    option2: string,
-    option3: string,
-    mult: boolean
+    option1?: string,
+    option2?: string,
+    option3?: string,
+    mult?: boolean
   ): Promise<any> {
     return new Promise((resolve, reject) => {
+      if (!title || !date || !name) {
+        return reject(
+          new Error("Os campos title, date e name são obrigatórios.")
+        );
+      }
+
       const sql = `INSERT INTO appointments (title, date, name, option1, option2, option3, mult) VALUES (?, ?, ?, ?, ?, ?, ?)`;
       this.db.run(
         sql,
-        [title, date, name, option1, option2, option3, mult],
+        [
+          title,
+          date,
+          name,
+          option1 || null,
+          option2 || null,
+          option3 || null,
+          mult || false,
+        ],
         function (err) {
           if (err) {
             return reject(err);
