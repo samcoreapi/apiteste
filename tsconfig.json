@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2019", 
-    "module": "commonjs",
+    "target": "ESNext",
+    "module": "CommonJS",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist" 
+    "outDir": "./dist"
   },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
