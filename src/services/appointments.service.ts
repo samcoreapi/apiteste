@@ -10,23 +10,26 @@ export class AppointmentsService {
 
   private initializeDatabase() {
     this.db.serialize(() => {
-      this.db.run(`CREATE TABLE IF NOT EXISTS appointments (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                date TEXT NOT NULL,
-                userId INTEGER NOT NULL,
-                option1 TEXT,
-                option2 TEXT,
-                option3 TEXT,
-                mult BOOLEAN,
-                createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-                deletedAt DATETIME DEFAULT NULL,
-                deleted BOOLEAN DEFAULT 0,
-                FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
-            )`);
+      // Deletando a tabela se existir
+      this.db.run(`DROP TABLE IF EXISTS appointments`);
 
-      // Adicionando alguns dados de teste (se necessário)
+      this.db.run(`CREATE TABLE IF NOT EXISTS appointments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            date TEXT NOT NULL,
+            userId INTEGER NOT NULL,
+            option1 TEXT,
+            option2 TEXT,
+            option3 TEXT,
+            mult BOOLEAN,
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            deletedAt DATETIME DEFAULT NULL,
+            deleted BOOLEAN DEFAULT 0,
+            FOREIGN KEY (userId) REFERENCES users (id) ON DELETE CASCADE
+        )`);
+
+      // Adicionando alguns dados de teste
       this.db.run(
         `INSERT INTO appointments (title, date, userId, option1, option2, option3, mult) VALUES (?, ?, ?, ?, ?, ?, ?)`,
         [
