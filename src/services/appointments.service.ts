@@ -56,7 +56,7 @@ export class AppointmentsService {
   }
 
   public createAgendamento(
-    title?: string,
+    title: string, // title é obrigatório
     date?: string,
     name?: string,
     option1?: string,
@@ -69,7 +69,7 @@ export class AppointmentsService {
       this.db.run(
         sql,
         [
-          title || null,
+          title,
           date || null,
           name || null,
           option1 || null,
