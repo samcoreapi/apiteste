@@ -1,17 +1,15 @@
-import express, { Request, Response, Router } from "express";
-import { AppointmentsController } from "./controllers/appointments.controller";
-import appointmentsRouter from "./routes/appointments.routes";
+import express from 'express';
+import bodyParser from 'body-parser';
+import routes from './routes/index';
+import { initializeDatabase } from './database/database';
 
 const app = express();
+const PORT = 3000;
 
-// Middleware para interpretar JSON
-app.use(express.json());
+app.use(bodyParser.json());
 
-app.use(appointmentsRouter);
+app.use('/api', routes);
 
-// Rota raiz da aplicação
-app.get("/", (req: Request, res: Response) => {
-  res.send("<center><h1>API de Agendamentos</h1></center>");
-});
+
 
 export default app;

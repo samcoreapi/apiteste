@@ -1,30 +1,29 @@
-import { Request, Response } from "express";
-import { UsersService } from "../services/users.service";
+import { Request, Response } from 'express';
+import { db } from '../database/database';
 
-export class UsersController {
-  private usersService: UsersService;
+export async function createUser(req: Request, res: Response) {
+  const { email, password, name } = req.body;
 
-  constructor() {
-    this.usersService = new UsersService();
+  try {
+    const database = await db;
+    await database.run(`
+            INSERT INTO users (email, password, name)
+            VALUES (?, ?, ?)
+        `, [email, password, name]);
+
+    res.status(201).json({ email, name });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Could not create user' });
   }
+}
 
-  async createUser(req: Request, res: Response) {
-    const { name, password } = req.body;
-    try {
-      const novoUsuario = await this.usersService.createUser(name, password);
-      res.status(201).json(novoUsuario);
-    } catch (error) {
-      res.status(500).json({ message: "Erro ao criar usuário." });
-    }
-  }
-
-  async login(req: Request, res: Response) {
-    const { name, password } = req.body;
-    try {
-      const token = await this.usersService.login(name, password);
-      res.json({ token });
-    } catch (error) {
-      res.status(401).json({ message: "Login falhou." });
-    }
+export async function getUsers(req: Request, res: Response) {
+  try {
+    const database = await db;
+    const users = await database.all('SELECT * FROM users');
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Could not retrieve users' });
   }
 }

@@ -1,38 +1,32 @@
-import { Request, Response } from "express";
-import { AppointmentsService } from "../services/appointments.service";
+import { Request, Response } from 'express';
+import { db } from '../database/database';
 
-export class AppointmentsController {
-  private appointmentsService: AppointmentsService;
+export async function createAppointment(req: Request, res: Response) {
+  const { title, date, userId, option1, option2, option3, mult } = req.body;
 
-  constructor() {
-    this.appointmentsService = new AppointmentsService();
+  if (!userId) {
+    return res.status(400).json({ error: 'userId is required' });
   }
 
-  async getAgendamentos(req: Request, res: Response) {
-    try {
-      const agendamentos = await this.appointmentsService.getAgendamentos();
-      return res.json(agendamentos);
-    } catch (error) {
-      console.error("Erro ao obter agendamentos:", error);
-      return res.status(500).json({ message: "Erro ao obter agendamentos." });
-    }
-  }
+  try {
+    const database = await db;
+    await database.run(`
+            INSERT INTO appointments (title, date, userId, option1, option2, option3, mult)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `, [title, date, userId, option1, option2, option3, mult]);
 
-  async createAgendamento(req: Request, res: Response) {
-    const { title, date, name, option1, option2, option3, mult } = req.body;
-    try {
-      const novoAgendamento = await this.appointmentsService.createAgendamento(
-        title,
-        date,
-        name,
-        option1,
-        option2,
-        option3,
-        mult
-      );
-      res.status(201).json(novoAgendamento);
-    } catch (error) {
-      res.status(500).json({ message: "Erro ao criar agendamento." });
-    }
+    res.status(201).json({ title, date, userId, option1, option2, option3, mult });
+  } catch (error) {
+    res.status(500).json({ error: 'Could not create appointment' });
+  }
+}
+
+export async function getAppointments(req: Request, res: Response) {
+  try {
+    const database = await db;
+    const appointments = await database.all('SELECT * FROM appointments');
+    res.status(200).json(appointments);
+  } catch (error) {
+    res.status(500).json({ error: 'Could not retrieve appointments' });
   }
 }
