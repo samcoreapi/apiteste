@@ -11,9 +11,10 @@ export class AppointmentsController {
   async getAgendamentos(req: Request, res: Response) {
     try {
       const agendamentos = await this.appointmentsService.getAgendamentos();
-      res.json(agendamentos);
+      return res.json(agendamentos);
     } catch (error) {
-      res.status(500).json({ message: "Erro ao obter agendamentos." });
+      console.error("Erro ao obter agendamentos:", error);
+      return res.status(500).json({ message: "Erro ao obter agendamentos." });
     }
   }
 

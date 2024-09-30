@@ -1,15 +1,16 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { AppointmentsController } from "../controllers/appointments.controller";
 
-const appointmentsRouter = Router();
+const appointmentsRouter: Router = Router();
 const appointmentsController = new AppointmentsController();
 
 appointmentsRouter.get(
-  "/agendamentos",
+  "/appointments",
   appointmentsController.getAgendamentos.bind(appointmentsController)
 );
+
 appointmentsRouter.post(
-  "/agendamentos",
+  "/appointments",
   appointmentsController.createAgendamento.bind(appointmentsController)
 );
 

@@ -24,6 +24,20 @@ export class AppointmentsService {
                 deletedAt DATETIME DEFAULT NULL,
                 deleted BOOLEAN DEFAULT 0
             )`);
+
+      // Adicionando alguns dados de teste
+      this.db.run(
+        `INSERT INTO appointments (title, date, name, option1, option2, option3, mult) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          "Consulta",
+          "2024-10-01",
+          "João",
+          "Opção A",
+          "Opção B",
+          "Opção C",
+          false,
+        ]
+      );
     });
   }
 
