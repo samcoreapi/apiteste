@@ -1,17 +1,23 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import { AppointmentsController } from "../controllers/appointments.controller";
+import { UsersController } from "../controllers/users.controller";
 
-const appointmentsRouter: Router = Router();
+const router = Router();
 const appointmentsController = new AppointmentsController();
+const usersController = new UsersController();
 
-appointmentsRouter.get(
+// Definindo as rotas de agendamentos
+router.get(
   "/appointments",
   appointmentsController.getAgendamentos.bind(appointmentsController)
 );
-
-appointmentsRouter.post(
+router.post(
   "/appointments",
   appointmentsController.createAgendamento.bind(appointmentsController)
 );
 
-export default appointmentsRouter;
+// Definindo as rotas de usuários
+router.post("/users", usersController.createUser.bind(usersController));
+router.post("/session", usersController.login.bind(usersController));
+
+export default router;
